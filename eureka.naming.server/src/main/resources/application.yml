@@ -1,0 +1,27 @@
+# ===================================================================
+# Spring Boot configuration for the "L1" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+    instance:
+        appname: eureka-service
+    server:
+        enable-self-preservation: true
+    client:
+        registerWithEureka: false
+        fetchRegistry: false
+    dashboard:
+        path: /registry
+
+
+
+            
+            

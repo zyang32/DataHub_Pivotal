@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: employee-dashboard-service
+
+#spring.cloud.config.uri=https://cloudconfig-reflective-pangolin.cfapps.io
+
+
+security:
+  oauth2:
+    resource: 
+      user-info-uri: https://auth-service-dev.cfapps.io/service/user
+
+
+
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+        defaultZone: https://eureka-service-dev.cfapps.io/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+    appname: employee-dashboard-service
+    
+

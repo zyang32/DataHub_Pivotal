@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: employee-service
+  jpa: 
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+  cloud:
+    config:
+      uri: https://cloud-config-service-dev.cfapps.io/
+  profiles:
+    active: dev
+    
+           
+security:
+  oauth2:
+    resource: 
+      user-info-uri: https://auth-service-dev.cfapps.io/service/user
+
+
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+        defaultZone: https://eureka-service-dev.cfapps.io/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+    appname: employee-service
+     

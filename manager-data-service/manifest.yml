@@ -1,0 +1,5 @@
+applications:
+- name: manager-service
+  path: ./target/manager-data-service-0.0.1-SNAPSHOT.jar
+  host: manager-service-dev
+  instances: 1

@@ -1,0 +1,138 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+eureka:
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        serviceUrl:
+            defaultZone: https://cxsregistryservice-dev.app.wtcdev2.paas.fedex.com/regs/eureka/
+        instance:
+            hostname: ${vcap.application.uris[0]}
+            nonSecurePort: 80
+spring:    
+    messages:
+        cache-seconds: 1
+    profiles:
+        include: swagger # automatically set the 'swagger' profile
+
+
+logging:
+    level:
+        com.fedex.cxs: DEBUG
+        org.springframework.web: INFO
+        org.hibernate: INFO
+        net.sf.ehcache: WARN
+        
+cxs:
+    applicationId: countrycxs
+    geccoFeaturesEnabled: true
+    condorTwoFeaturesEnabled: true   
+    rest:
+        uriConfigProperties:
+            apig.client.id: l7xxfa6e963315b14c8eb3f490c0a3437096
+            apig.client.secret.key: 725f5798300f44428a0e1ddca74568e2
+            apig.hostname: apidrt.idev.fedex.com:8443
+            #  if callThroughAPIG = false (call cfms through eureka/ribbon),set the following:
+            #     cfms.v3.service.hostname: cfms
+            #   cfms.v3.service.uri: /customermessage/v1/messages/info
+            #   cfms.v3.service.secured: false
+            #  if callThroughAPIG = true (call cfms through apig),set the following: 
+            #     cfms.v3.service.hostname: apidrt.idev.fedex.com:8443
+            #   cfms.v3.service.uri: /cfms/v1/customermessage/info
+            #   cfms.v3.service.secured: true
+            cfms.v3.service.hostname: apidrt.idev.fedex.com:8443
+            cfms.v3.callThroughAPIG: true
+            cfms.v3.service.uri: /cfms/v1/customermessage/info
+            cfms.v3.service.secured: true 
+            cfms.v3.service.media.types: application/json
+            cfms.v3.service.response.version: apig-cxs-v3
+            cfms.v3.service.request.media.types: application/json
+            apig.secured: true
+            apig.oauth.uri: /auth/oauth/v2/token
+            apig.grant.type: client_credentials
+            apig.scope: oob 
+            secured: true 
+            media.types: application/json
+            request.media.types: application/json
+countrycxs:  
+   fast:
+       cnty:
+           domMajorVersion: 3
+           domIntermediateVersion: 1
+           domMinorVersion: 0
+           softwareId: INET
+           softwareReleaseVersion: 35
+           applicationId: commondatacal
+           softwareReleaseRevision: 52
+           #serviceFactoryFileLocation: content/cnty/servicefactory.properties.L3-edcw
+           cntyServiceProperties:            
+               destination: EJBRemote
+               cluster.auto.reconnect: true
+               jndi.name: CntyHome.v3
+               service.timeout.threshold: '5'
+               service.timeout.interval.msecs: '18000'
+               service.reset.interval.msecs: '20000'
+               fast.fail.impl: timeout
+               max.concurrent.connect.attempts: '10'
+               max.concurrent.invoke.attempts: '20'
+               ejb.url: t3://cntydevt-cos.idev.fedex.com:15126,t3://cntydevt-wap.idev.fedex.com:15126
+       crdt:
+           domMajorVersion: 7
+           domIntermediateVersion: 5
+           domMinorVersion: 0
+           softwareId: INET
+           softwareReleaseVersion: 35
+           applicationId: commondatacal
+           softwareReleaseRevision: 52            
+           #serviceFactoryFileLocation: content/crdt/servicefactory.properties.L3-edcw   
+           crdtServiceProperties:
+               destination: EJBRemote
+               cluster.auto.reconnect: true
+               jndi.name: CrdtHome.v7
+               service.timeout.threshold: '5'
+               service.timeout.interval.msecs: '18000'
+               service.reset.interval.msecs: '20000'
+               fast.fail.impl: timeout
+               max.concurrent.connect.attempts: '10'
+               max.concurrent.invoke.attempts: '20'
+               remote.app.id: APP81
+               ##token.impl.class: com.fedex.nxgen.servicefactory.v2.enterprise.LDAPAuthenticationProvider
+               ejb.url: t3://crdtdevt-cos.idev.fedex.com:7935
+               verbose: true
+               #client.propfile: client.properties
+               #security.propfile: security.L3.properties
+       locs:
+           domMajorVersion: 5
+           domIntermediateVersion: 0
+           domMinorVersion: 0
+           softwareId: INET
+           softwareReleaseVersion: 35
+           applicationId: commondatacal
+           softwareReleaseRevision: 52
+           #serviceFactoryFileLocation: content/locs/servicefactory.properties.L3-edcw  
+           locsServiceProperties:
+               destination: EJBRemote
+               cluster.auto.reconnect: true
+               jndi.name: LocsHome.v5
+               service.timeout.threshold: '5'
+               service.timeout.interval.msecs: '18000'
+               service.reset.interval.msecs: '20000'
+               fast.fail.impl: timeout
+               max.concurrent.connect.attempts: '10'
+               max.concurrent.invoke.attempts: '20'
+               ejb.url: t3://locsdevt-cos.idev.fedex.com:15128,t3://locsdevt-wap.idev.fedex.com:15128 
+       wgtm:
+           applicationId: WGRT
+           #serviceFactoryFileLocation: content/wgtm/servicefactory.properties.L3-edcw
+           timeout: 30            
+           wgtmServiceProperties:
+               ejb.url: t3://wgtmapidrt-cos.idev.fedex.com:7179

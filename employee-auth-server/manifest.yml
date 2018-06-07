@@ -1,0 +1,5 @@
+applications:
+- name: auth-service
+  path: ./target/employee-auth-server-0.0.1-SNAPSHOT.jar
+  host: auth-service-dev
+  instances: 1

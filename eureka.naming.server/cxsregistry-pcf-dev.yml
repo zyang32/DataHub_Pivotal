@@ -1,0 +1,69 @@
+# ===================================================================
+# Spring Boot configuration for the "L1" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    profiles:
+        active: pcf-dev
+        
+eureka:
+    server:
+        # When the eureka server starts up it tries to fetch all the registry information from 
+        # the peer eureka nodes. This operation is retried 5 times for each peer (configurable 
+        # by eureka.server.numberRegistrySyncRetries). If for some reason this operation fails, 
+        # the server does not allow clients to get the registry information for 5min 
+        # (configurable by eureka.server.getWaitTimeInMsWhenSyncEmpty)
+        waitTimeInMsWhenSyncEmpty: 0
+        # Eureka Server has a protection feature: in case a certain number of Instances fail to 
+        # send heartbeats in a determined time interval, the Server will not remove them from 
+        # the registry. It considers that a network partition occurred and will wait for these 
+        # Instances to come back. This feature is very useful in Cloud deploys and can be turned 
+        # off for collocated Services in a private data center.
+        enableSelfPreservation: false
+    instance:
+        #instanceId: cfms:${spring.application.instance_id:${random.value}}
+        #prefer-ip-address: true
+        #lease-renewal-interval-in-seconds: 5
+        lease-expiration-duration-in-seconds: 10
+        status-page-url-path: ${management.context-path}/info
+        health-check-url-path: ${management.context-path}/health
+        #metadata-map:
+            #profile: ${spring.profiles.active}
+            #version: ${info.project.version}
+    client:
+        enabled: true
+        healthcheck:
+            enabled: true
+        #fetch-registry: true
+        #register-with-eureka: true
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+        serviceUrl:
+            defaultZone: https://cxsregistryservice-dev.app.wtcdev2.paas.fedex.com/regs/eureka/
+management:
+    context-path: /management
+    security:
+        enabled: false
+    basic:
+        enabled: false
+    health:
+        jms:
+            enabled: false
+        config:
+            enabled: false
+
+logging:
+    level:
+        org.springframework.web: INFO
+        com.zaxxer.hikari: DEBUG
+        org.apache.tomcat.jdbc: DEBUG
+        net.sf.ehcache: WARN
+        com.fedex.cxs: DEBUG

@@ -1,0 +1,7 @@
+applications:
+- name: cloud-config-service
+  path: ./target/spring-cloud-config-server-0.0.1-SNAPSHOT.jar
+  host: cloud-config-service-dev
+  instances: 1
+
+     

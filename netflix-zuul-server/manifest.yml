@@ -1,0 +1,7 @@
+applications:
+- name: zuul-service-dev
+  path: ./target/netflix-zuul-server-0.0.1-SNAPSHOT.jar
+  host: zuul-service-dev
+  instances: 1
+
+     

@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: zuul-service
+
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+        defaultZone: https://eureka-service-dev.cfapps.io/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+    appname: zuul-service
+     
+
+zuul:
+  sensitive-headers: Cookie,Set-Cookie
+  ignoredServices: "*"
+  routes:
+    employee-dashboard-service: 
+      path: /dashboard/**
+      serviceId: employee-dashboard-service
+      stripPrefix: false
+    employee-dashboard-service-feign: 
+      path: /dashboard-feign/**
+      serviceId: employee-dashboard-service
+      stripPrefix: false
+    employee-service: 
+      path: /employee/**
+      serviceId: employee-service
+      stripPrefix: false
+    manager-service: 
+      path: /manager/**
+      serviceId: manager-service
+      stripPrefix: false
+  host:
+    socket-timeout-millis: 10000 
+    connect-timeout-millis: 10000
+    
+  
