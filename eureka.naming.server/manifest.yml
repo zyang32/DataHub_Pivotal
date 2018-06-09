@@ -2,4 +2,4 @@ applications:
 - name: eureka-service
   path: ./target/eureka.naming.server-0.0.1-SNAPSHOT.jar
   host: eureka-service-dev
-  instances: 2
+  instances: 1
