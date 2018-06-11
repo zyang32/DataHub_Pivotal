@@ -2,30 +2,27 @@ package com.example.employeedatadashboard;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-	@RefreshScope
-	@RestController
+	//@RefreshScope
+	//@RestController
+	@Controller
 	public class EmployeeInfoController {
 	    
-		@Autowired
+		/*@Autowired
 	    private RestTemplate restTemplate;
+		*/
 		
 		@Autowired
 		private EmployeeServiceProxy employeeServiceProxy; 
@@ -35,7 +32,13 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 		private ManagerServiceProxy managerServiceProxy; 
 
 		
-		@RequestMapping(value = "/dashboard/hello")
+		@RequestMapping("/index")
+		public String welcome(Map<String, Object> model) {
+			//model.put("message", "Welcome Shirish");
+			return "index";
+		}
+		
+		/*@RequestMapping(value = "/dashboard/hello")
 	    public String findHello() {
 	        return "Hello";
 	    }
@@ -64,6 +67,10 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	        ResponseEntity<Collection> empList = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Collection.class);
 	        return empList;
 	   }
+	   
+	 
+
+	   */
 	    
 	    
 	    @HystrixCommand(fallbackMethod = "reliablefindmeFeign")
@@ -83,27 +90,24 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	        return resource;
 	    }
 	    
+	    @RequestMapping(value = "/dashboard-feign/peers", produces = MediaType.APPLICATION_JSON_VALUE)
+		   public Collection <Employee> findPeersFeign( @RequestHeader("Authorization") String bearerToken) {
+		    	Collection <Employee> list = employeeServiceProxy.getAllEmployeeData(bearerToken);
+		        return list;
+		}
 	    
-	    //@HystrixCommand(fallbackMethod = "reliablefindmanagerFeign")
+	    
+	    @HystrixCommand(fallbackMethod = "reliablefindmanagerFeign")
 	    @RequestMapping(value = "/dashboard-feign/manager/{manager}", produces = MediaType.APPLICATION_JSON_VALUE)
 	    public List<Employee> findmanagerFeign(@PathVariable Long manager,@RequestHeader("Authorization") String bearerToken) {
 	    	List<Employee> emp = managerServiceProxy.getManagerData(manager,bearerToken);
 	        return emp;
 	    }
 	    
-	    /*public String reliablefindmanagerFeign(Long manager) {
+	    public String reliablefindmanagerFeign(Long manager) {
 	    	return "Deafult Response For - findmanagerFeign";
-	    }*/
-	    
-	    
-	    //@HystrixCommand(fallbackMethod = "reliablefindPeersFeign")
-	    @RequestMapping(value = "/dashboard-feign/peers", produces = MediaType.APPLICATION_JSON_VALUE)
-	    public Collection <Employee> findPeersFeign( @RequestHeader("Authorization") String bearerToken) {
-	    	Collection <Employee> list = employeeServiceProxy.getAllEmployeeData(bearerToken);
-	        return list;
 	    }
 	    
-	    /*public String reliablefindPeersFeign() {
-	    	return "Deafult Response For - reliablefindPeersFeign";
-	    }*/
+	    
+	    
 	}
