@@ -1,5 +1,5 @@
 applications:
 - name: employee-dashboard-service
-  path: ./target/employee-data-dashboard-0.0.1-SNAPSHOT.jar
+  path: ./target/employee-data-dashboard-0.0.1-SNAPSHOT.war
   host: employee-dashboard-service-dev
   instances: 2
