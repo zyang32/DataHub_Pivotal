@@ -1,5 +1,6 @@
 package com.example.employeedatadashboard;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -83,22 +84,31 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	        return "empDetails";
 	    }  
 	    
-	    public EmployeeInfo reliablefindmeFeign(Long id,String bearerToken) {
+	    public String reliablefindmeFeign(Map<String, Object> model,Long id,String bearerToken) {
 	    	EmployeeInfo emp = new EmployeeInfo(1000,"Not Found", "Not Found", 5000, "9999");
-	        return emp;
+	    	model.put("empDetails", emp);
+	    	return "empDetails";
 	    }
 	    
 	    
 	    
 	    @HystrixCommand(fallbackMethod = "reliablefindmanagerFeign")
 	    @RequestMapping(value = "/dashboard-feign/manager/{manager}", produces = MediaType.APPLICATION_JSON_VALUE)
-	    public List<Employee> findmanagerFeign(@PathVariable Long manager,@RequestHeader("Authorization") String bearerToken) {
-	    	List<Employee> emp = managerServiceProxy.getManagerData(manager,bearerToken);
-	        return emp;
+	    public String findmanagerFeign(Map<String, Object> model,@PathVariable Long manager,@RequestHeader("Authorization") String bearerToken) {
+	    	List<Employee> empList = managerServiceProxy.getManagerData(manager,bearerToken);
+	    	model.put("empDetails", empList);
+	        return "empHierarchy";
 	    }
 	    
-	    public String reliablefindmanagerFeign(Long manager) {
-	    	return "Deafult Response For - findmanagerFeign";
+	    public String reliablefindmanagerFeign(Map<String, Object> model,Long manager,String bearerToken) {
+	    	
+	    	List<Employee> empList = new ArrayList<Employee>();
+	    	
+	    	empList.add(new Employee("Not Found", "Not Found", 5000));
+	    	empList.add(new Employee("Not Found", "Not Found", 5000));	    	
+	    	
+	    	model.put("empDetails", empList);
+	    	return "empHierarchy";
 	    }
 	    
 	    
