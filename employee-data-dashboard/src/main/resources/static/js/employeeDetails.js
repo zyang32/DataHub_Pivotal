@@ -12,7 +12,7 @@ function getEmployeeDetails(){
 }
 
 
-function getAuthToken(){
+/*function getAuthToken(){
 	   //var employeeId = document.getElementById("employeeid").value;
 	   var contentType = $("meta[name='Content-Type']").attr("application/x-www-form-urlencoded");	
 	   var authorization = $("meta[name='Authorization']").attr("Basic ZW1wbG95ZWVhcHA6cGFzcw==");	
@@ -28,6 +28,6 @@ function getAuthToken(){
 	          alert(data);
 	       }
 	   });
-	}
+	}*/
 
 
