@@ -26,6 +26,18 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 			return "index";
 		}
 		
+		 @HystrixCommand(fallbackMethod = "reliablefindmeFeign")
+	    @RequestMapping(value = "/dashboard-feign/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	    public Resource<EmployeeInfo> findmeFeign(Map<String, Object> model,@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
+	    	System.out.println("Inside findmeFeign");
+	    	EmployeeInfo emp = employeeServiceProxy.getEmployeeData(id, bearerToken);
+	    	Resource<EmployeeInfo> resource = new Resource<EmployeeInfo>(emp);
+	    	ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).findPeersFeign(bearerToken));
+	    	resource.add(linkTo.withRel("All-Employees"));
+		model.put("empDetails", resource);    
+	        return "empDetails";
+	    }  
+		
 	    
 	    
 	}
