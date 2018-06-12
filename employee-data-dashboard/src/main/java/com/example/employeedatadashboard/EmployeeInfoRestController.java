@@ -5,23 +5,26 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-	@RefreshScope
+	//@RefreshScope
 	//@RestController
 	@Controller
 	public class EmployeeInfoRestController {
 	    
-		/*@Autowired
+		@Autowired
 	    private RestTemplate restTemplate;
-		*/
+		
 		
 		@Autowired
 		private EmployeeServiceProxy employeeServiceProxy; 
@@ -74,20 +77,33 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 		}
 		
 		
+		@RequestMapping("/empDetails/{id}")
+		public String getEmployeeDetails(Map<String, Object> model,@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
+			String url = "https://zuul-service-dev.cfapps.io/dashboard-feign/" + id;
+	        HttpHeaders requestHeaders = new HttpHeaders();
+	        requestHeaders.add("Authorization", bearerToken);
+	        HttpEntity<?> httpEntity = new HttpEntity<Object>(requestHeaders);
+	        System.out.println("requestHeaders:" + requestHeaders.toString());
+	        ResponseEntity<EmployeeInfo> emp = restTemplate.exchange(url, HttpMethod.GET, httpEntity, EmployeeInfo.class);
+	        model.put("employee", emp);
+	        return "empDetails";
+		}
+		
+		
 		
 	    @HystrixCommand(fallbackMethod = "reliablefindmeFeign")
 	    @RequestMapping(value = "/dashboard-feign/{id}")
-	    public String findmeFeign(Map<String, Object> model,@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
+	    public EmployeeInfo findmeFeign(@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
 	    	System.out.println("Inside findmeFeign");
 	    	EmployeeInfo emp = employeeServiceProxy.getEmployeeData(id, bearerToken);
-	    	model.put("employee", emp);
-	        return "empDetails";
+	    	//model.put("employee", emp);
+	        return emp;
 	    }  
 	    
-	    public String reliablefindmeFeign(Map<String, Object> model,Long id,String bearerToken) {
+	    public EmployeeInfo reliablefindmeFeign(Long id,String bearerToken) {
 	    	EmployeeInfo emp = new EmployeeInfo(1000,"Not Found", "Not Found", 5000, "9999");
-	    	model.put("empDetails", emp);
-	    	return "empDetails";
+	    	//model.put("empDetails", emp);
+	    	return emp;
 	    }
 	    
 	    
