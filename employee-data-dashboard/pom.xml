@@ -6,7 +6,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>employee-data-dashboard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>employee-data-dashboard</name>
 	<description>Demo project for Spring Boot</description>
@@ -93,12 +93,6 @@
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
 		
-		<!-- <dependency>
-		  	<groupId>io.jmnarloch</groupId>
-		  	<artifactId>feign-oauth2-spring-cloud-starter</artifactId>
-		  	<version>1.0.0</version>
-		</dependency> -->
-		
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -111,30 +105,6 @@
 			<version>2.4.0</version>
 		</dependency>
 		
-        <!-- Tomcat Embed -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- JSTL -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>
-        <!-- To compile JSP files -->
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-		<!-- Optional, test for static content, bootstrap CSS -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>3.3.7</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

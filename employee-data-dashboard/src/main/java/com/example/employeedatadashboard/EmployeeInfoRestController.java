@@ -2,28 +2,23 @@ package com.example.employeedatadashboard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-	//@RefreshScope
-	//@RestController
-	@Controller
+	@RefreshScope
+	@RestController
+	//@Controller
 	public class EmployeeInfoRestController {
 	    
-		@Autowired
-	    private RestTemplate restTemplate;
+		/*@Autowired
+	    private RestTemplate restTemplate;*/
 		
 		
 		@Autowired
@@ -68,7 +63,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	   
 	 
 
-	   */
+	   
 	    
 		@RequestMapping("/index")
 		public String welcome(Map<String, Object> model) {
@@ -88,7 +83,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	        model.put("employee", emp);
 	        return "empDetails";
 		}
-		
+		*/
 		
 		
 	    @HystrixCommand(fallbackMethod = "reliablefindmeFeign")
@@ -110,21 +105,21 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	    
 	    @HystrixCommand(fallbackMethod = "reliablefindmanagerFeign")
 	    @RequestMapping(value = "/dashboard-feign/manager/{manager}")
-	    public String findmanagerFeign(Map<String, Object> model,@PathVariable Long manager,@RequestHeader("Authorization") String bearerToken) {
+	    public List<Employee> findmanagerFeign(@PathVariable Long manager,@RequestHeader("Authorization") String bearerToken) {
 	    	List<Employee> empList = managerServiceProxy.getManagerData(manager,bearerToken);
-	    	model.put("empDetails", empList);
-	        return "empHierarchy";
+	    	//model.put("empDetails", empList);
+	        return empList;
 	    }
 	    
-	    public String reliablefindmanagerFeign(Map<String, Object> model,Long manager,String bearerToken) {
+	    public List<Employee> reliablefindmanagerFeign(Long manager,String bearerToken) {
 	    	
 	    	List<Employee> empList = new ArrayList<Employee>();
 	    	
 	    	empList.add(new Employee("Not Found", "Not Found", 5000));
 	    	empList.add(new Employee("Not Found", "Not Found", 5000));	    	
 	    	
-	    	model.put("empDetails", empList);
-	    	return "empHierarchy";
+	    	//model.put("empDetails", empList);
+	    	return empList;
 	    }
 	    
 	    
