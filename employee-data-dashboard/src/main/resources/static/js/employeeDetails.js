@@ -6,7 +6,7 @@ function getEmployeeDetails(){
        dataType: "json",
        url: "https://zuul-service-dev.cfapps.io/dashboard-feign/" + employeeId,
        success: function(data){        
-          alert(data);
+        //  alert(data);
        }
    });
 }

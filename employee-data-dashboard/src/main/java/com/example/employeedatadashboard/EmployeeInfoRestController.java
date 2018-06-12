@@ -1,22 +1,21 @@
 package com.example.employeedatadashboard;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 	@RefreshScope
-	@RestController
+	//@RestController
+	@Controller
 	public class EmployeeInfoRestController {
 	    
 		/*@Autowired
@@ -30,6 +29,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 		@Autowired
 		private ManagerServiceProxy managerServiceProxy; 
 
+		
+		
 		
 		/*@RequestMapping(value = "/dashboard/hello")
 	    public String findHello() {
@@ -65,29 +66,28 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 	   */
 	    
-	    
+		@RequestMapping("/index")
+		public String welcome(Map<String, Object> model) {
+			//model.put("message", "Welcome Shirish");
+			return "index";
+		}
+		
+		
+		
 	    @HystrixCommand(fallbackMethod = "reliablefindmeFeign")
 	    @RequestMapping(value = "/dashboard-feign/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	    public Resource<EmployeeInfo> findmeFeign(@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
+	    public String findmeFeign(Map<String, Object> model,@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
 	    	System.out.println("Inside findmeFeign");
 	    	EmployeeInfo emp = employeeServiceProxy.getEmployeeData(id, bearerToken);
-	    	Resource<EmployeeInfo> resource = new Resource<EmployeeInfo>(emp);
-	    	ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).findPeersFeign(bearerToken));
-	    	resource.add(linkTo.withRel("All-Employees"));
-	        return resource;
+	    	model.put("empDetails", emp);
+	        return "empDetails";
 	    }  
 	    
-	    public Resource<EmployeeInfo> reliablefindmeFeign(Long id,String bearerToken) {
+	    public EmployeeInfo reliablefindmeFeign(Long id,String bearerToken) {
 	    	EmployeeInfo emp = new EmployeeInfo(1000,"Not Found", "Not Found", 5000, "9999");
-	    	Resource<EmployeeInfo> resource = new Resource<EmployeeInfo>(emp);
-	        return resource;
+	        return emp;
 	    }
 	    
-	    @RequestMapping(value = "/dashboard-feign/peers", produces = MediaType.APPLICATION_JSON_VALUE)
-		   public Collection <Employee> findPeersFeign( @RequestHeader("Authorization") String bearerToken) {
-		    	Collection <Employee> list = employeeServiceProxy.getAllEmployeeData(bearerToken);
-		        return list;
-		}
 	    
 	    
 	    @HystrixCommand(fallbackMethod = "reliablefindmanagerFeign")
