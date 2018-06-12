@@ -1,0 +1,5 @@
+applications:
+- name: employee-main-app
+  path: ./target/employee-main-app-0.0.1-SNAPSHOT.war
+  host: employee-main-app-dev
+  instances: 1
