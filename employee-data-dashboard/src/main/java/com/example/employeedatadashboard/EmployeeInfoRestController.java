@@ -80,7 +80,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 	    public String findmeFeign(Map<String, Object> model,@PathVariable Long id, @RequestHeader("Authorization") String bearerToken) {
 	    	System.out.println("Inside findmeFeign");
 	    	EmployeeInfo emp = employeeServiceProxy.getEmployeeData(id, bearerToken);
-	    	model.put("empDetails", emp);
+	    	model.put("employee", emp);
 	        return "empDetails";
 	    }  
 	    
