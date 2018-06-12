@@ -1,14 +1,16 @@
 function getEmployeeDetails(){
    var employeeId = document.getElementById("employeeid").value;
+   var url = "https://zuul-service-dev.cfapps.io/dashboard-feign/" + employeeId;
+   window.location.replace(url);
+   
    //var header = $("meta[name='_csrf_header']").attr("content");	
-   $.ajax({ 
+   /*$.ajax({ 
        type: "GET",
-       dataType: "json",
        url: "https://zuul-service-dev.cfapps.io/dashboard-feign/" + employeeId,
        success: function(data){        
         //  alert(data);
        }
-   });
+   });*/
 }
 
 
