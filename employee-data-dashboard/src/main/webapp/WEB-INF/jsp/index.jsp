@@ -26,7 +26,7 @@
 			<label for="employeeid">Employee id:</label>
 			<input id="employeeid" type="text" maxlength="8" size="15" required>
     		<button class="btn btn-sm btn-primary" type="button" id="employeeDetailsLink" onclick="getEmployeeDetails()"> Go </button>
-    		<button class="btn btn-sm btn-primary" type="button" id="employeeDetailsLink" onclick="getAuthToken()"> Get Auth Token </button>
+    		<!-- <button class="btn btn-sm btn-primary" type="button" id="employeeDetailsLink" onclick="getAuthToken()"> Get Auth Token </button> -->
     		
 		</div>
 	</nav>
